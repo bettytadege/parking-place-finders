@@ -1,0 +1,111 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id    Int @id @default(autoincrement())
+  fName   String
+  lName   String
+  email   String   @unique
+  phoneNumber String @unique // it include country code (+251)
+  status  UserStatus?
+  role  Role @default(user)
+  vehicles Vehicle[]
+  book Booking[]
+  payment Payment[]
+  createdAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Vehicle{
+  id      Int @id @default(autoincrement())
+  vName    String
+  vType   VehicleType 
+  plateNumber  String //AA2893
+  vColor    String?   //optional
+  userId    Int 
+  user   User @relation(fields: [userId] ,references: [id])
+  createdAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model ParkingProvider{
+   id      Int @id @default(autoincrement())
+   providerName String
+   totalSpace Int
+   availableSpace Int
+   openingTime DateTime
+   closingTime DateTime
+   address Address[]
+   book Booking[]
+   createdAt DateTime @default(now())
+   updatedAt  DateTime @updatedAt
+}
+
+model Address{
+   id  Int @id @default(autoincrement())
+   longitude  Float
+   latitude  Float
+   providerId Int
+   provider ParkingProvider @relation(fields: [providerId], references: [id])
+   createdAt DateTime @default(now())
+   updatedAt  DateTime @updatedAt
+}
+model Booking{
+  id  Int @id @default(autoincrement())
+   userId    Int 
+   user   User @relation(fields: [userId] ,references: [id])
+   providerId Int
+   provider ParkingProvider @relation(fields: [providerId], references: [id])
+   status BookingStatus
+   payment Payment[]
+   bookingDate DateTime
+   startTime  DateTime
+   endTime    DateTime
+   createdAt  DateTime @default(now())
+   updatedAt  DateTime @updatedAt
+}
+model Payment{
+   id  Int @id @default(autoincrement())
+   userId    Int 
+   user   User @relation(fields: [userId] ,references: [id])
+   bookingId    Int @unique //1-1
+   book   Booking @relation(fields: [bookingId] ,references: [id])
+   totalAmonut Float
+   
+}
+enum Role{
+  admin
+  user
+  superAdmin
+  }
+enum BookingStatus{
+  pending
+  cancelled
+  confirmed
+  }
+enum PaymentStatus{
+  pending
+  completed
+  cancelled
+
+  }
+
+  enum UserStatus{
+    active
+    inActive
+  }
+  
+  enum VehicleType{
+    van
+    Truck
+    Motorcycle
+    fireTruck
+    Buses
+  }
