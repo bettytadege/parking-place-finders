@@ -2,13 +2,17 @@
   "name": "parking-place-finder-prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "server.ts",
+  "type": "commonjs",
   "scripts": {
-    "start": "nodemon ts-node server.js"
+    "start": "nodemon --watch \"*.ts\" --exec \"ts-node\" server.ts"
   },
   "author": "berry",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/morgan": "^1.9.9",
     "@types/node": "^22.9.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
