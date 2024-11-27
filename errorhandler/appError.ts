@@ -4,6 +4,7 @@ class AppError extends Error {
     public status:string
     public isOperational:Boolean
 
+    
     constructor(message:string,statusCode:number) {
         console.log('message:', message);
         console.log('statusCode:', statusCode);
