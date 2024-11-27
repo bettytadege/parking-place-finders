@@ -14,8 +14,9 @@ model User{
   lName   String
   email   String   @unique
   phoneNumber String @unique // it include country code (+251)
+  password String
   status  UserStatus?
-  role  Role @default(user)
+  role  Role @default(user) 
   vehicles Vehicle[]
   book Booking[]
   payment Payment[]
