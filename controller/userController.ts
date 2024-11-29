@@ -6,11 +6,11 @@ import { signToken } from "../utils/auth";
 import bcrypt, { compare } from "bcryptjs";
 
 
-
+//REGISTER USER
 export const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password} = req.body;
-
+    console.log('register')
     const existingUser = await prisma.user.findUnique({
       where: {
         email,
@@ -41,6 +41,7 @@ export const register = catchAsync(
   }
 );
 
+//LOGIN
 export const login = catchAsync(
 
   async (req: Request, res: Response, next: NextFunction) => {
@@ -76,7 +77,7 @@ export const login = catchAsync(
   }
 );
 
-
+//GET USER BY ID
 export const getOneUser=catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     // 
     const { id } = req.params;
@@ -97,15 +98,17 @@ export const getOneUser=catchAsync(async(req: Request, res: Response, next: Next
     
 })
 
+//GET ALL USER
 export const getAllUser=catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     // 
     const filter={}
     const user = await prisma.user.findMany()
     res.status(200).json({
         status: "success",
-        message: "user logged succssfully",
         result:user.length,
         user,
       });
     
 })
+
+
