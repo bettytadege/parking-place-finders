@@ -4,19 +4,21 @@ import { prisma } from "../prisma/client";
 import AppError from "../errorhandler/appError";
 import { signToken } from "../utils/auth";
 import bcrypt, { compare } from "bcryptjs";
+import { v4 as uuidv4 } from 'uuid';
 
 
 //REGISTER USER
 export const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const { email, password} = req.body;
-    console.log('register')
+    const userId=uuidv4()
+    console.log('id:',userId,typeof userId)
     const existingUser = await prisma.user.findUnique({
       where: {
         email,
       },
     });
-
+    console.log(existingUser)
     // if user exist send error message
     if (existingUser) {
       return next(new AppError("User already exists with this email", 400));
@@ -27,8 +29,10 @@ export const register = catchAsync(
     const newUser = await prisma.user.create({
       data:
       { ...req.body,
+        id:userId,
       password:hashPassword,}
     });
+    // console.log("newuse::",newUser)
     //generate token
     const token = signToken({ id: newUser.id, role: newUser.role });
     // send response
@@ -57,6 +61,7 @@ export const login = catchAsync(
         email,
       },
     });
+    // console.log(user)
 
     // if user is not found in db send error message
     if (!user) {
@@ -81,9 +86,10 @@ export const login = catchAsync(
 export const getOneUser=catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     // 
     const { id } = req.params;
+    console.log(id,typeof id)
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(id),
+        id:id
       },
     });
 
