@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User{
-  id    Int @id @default(autoincrement())
+  id      String @id @default(uuid())
   firstName   String
   lastName   String
   email   String   @unique
@@ -22,73 +22,86 @@ model User{
   parkingProvider ParkingProvider[]
   book Booking[]
   payment Payment[]
+  ratingReview RatingReview []
   createdAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
 model Vehicle{
-  id      Int @id @default(autoincrement())
+ id      String @id @default(uuid())
   vehicleName    String
   vehicleType   VehicleType 
   plateNumber  String //AA2893
   vehicleColor    String?   //optional
-  userId    Int 
+  userId    String 
   user   User @relation(fields: [userId] ,references: [id])
   createdAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
 
 model ParkingProvider{
-   id      Int @id @default(autoincrement())
-   providerName String
+   id      String @id @default(uuid())
+   providerName String @unique
+   description String?
    totalSpace Int
    email String  @unique
    contactNumber String @unique
-   adminId Int   
+   adminId String   
    admin User  @relation(fields:[adminId] ,references:[id])
-   availableSpace Int
-   openingTime DateTime
-   closingTime DateTime
-   address Address[]
+   openingTime String
+   closingTime String
+   address  Address?
    book Booking[]
+   ratingReview RatingReview []
    createdAt DateTime @default(now())
    updatedAt  DateTime @updatedAt
 }
 
 model Address{
-   id  Int @id @default(autoincrement())
+   id      String @id @default(uuid())
    city String
    street String
    longitude  Float
    latitude  Float
-   providerId Int
+   providerId String @unique
    provider ParkingProvider @relation(fields: [providerId], references: [id])
    createdAt DateTime @default(now())
    updatedAt  DateTime @updatedAt
 }
 model Booking{
-  id  Int @id @default(autoincrement())
-   userId    Int 
+   id      String @id @default(uuid())
+   userId    String 
    user   User @relation(fields: [userId] ,references: [id])
-   providerId Int
+   providerId String
    provider ParkingProvider @relation(fields: [providerId], references: [id])
    status BookingStatus
-   payment Payment[]
-   bookingDate DateTime
+   price Float
+   payment Payment?
    startTime  DateTime
    endTime    DateTime
    createdAt  DateTime @default(now())
    updatedAt  DateTime @updatedAt
 }
+
 model Payment{
-   id  Int @id @default(autoincrement())
-   userId    Int 
+   id      String @id @default(uuid())
+   userId    String 
    user   User @relation(fields: [userId] ,references: [id])
-   bookingId    Int @unique //1-1
+   bookingId    String @unique //1-1
    book   Booking @relation(fields: [bookingId] ,references: [id])
    totalAmonut Float
    
 }
+model RatingReview{
+   id      String @id @default(uuid())
+   userId    String 
+   user   User @relation(fields: [userId] ,references: [id])
+    providerId String
+   provider ParkingProvider @relation(fields: [providerId], references: [id])
+}
+
+
+
 enum Role{
   admin
   user
