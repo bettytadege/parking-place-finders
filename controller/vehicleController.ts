@@ -3,32 +3,29 @@ import { NextFunction, Request, Response } from "express";
 import AppError from "../errorhandler/appError";
 import { catchAsync } from "../errorhandler/catchAsync";
 import { prisma } from "../prisma/client";
-
+import { v4 as uuidv4 } from 'uuid';
 
 //REGISTER VEHICLE
 export const register = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
     const{userId}=req.body
-
+    const vehicleId=uuidv4()
     if(!userId){
         return next(new AppError("please provide user id", 400));
     }
     const user=await prisma.user.findUnique({where:
         {
-        id:parseInt(userId)
+        id:userId
     },})
-    console.log(user)
-    if(!userId){
-        return next(new AppError("please provide user id", 400));
-    }
+    //
     if(!user){
         return next(new AppError("user not found", 400));
     }
      //create vehicle
       const vehicle = await prisma.vehicle.create({
-        data: { ...req.body, userId: user.id },
+        data: { ...req.body, userId: user.id ,id:vehicleId},
       });
-      console.log(vehicle)
+      
       // send response
       res.status(201).json({
         status: "success",
@@ -57,13 +54,13 @@ export const register = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
       const vehicle = await prisma.vehicle.findUnique({
-        where: { id: parseInt(id)},
+        where: { id},
       });
       if (!vehicle) {
         return next(new AppError("no vehicle found with this id", 400));
       }
     //   console.log(vehicle)
-     const updatedVehicle= await prisma.vehicle.update({ where:{ id: parseInt(id) },data:{
+     const updatedVehicle= await prisma.vehicle.update({ where:{ id },data:{
         ...req.body,
      } });
       res.status(200).json({
@@ -79,12 +76,12 @@ export const register = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
       const { id } = req.params;
       const vehicle = await prisma.vehicle.findUnique({
-        where: { id: parseInt(id) },
+        where: { id },
       });
       if (!vehicle) {
         return next(new AppError("no vehicle found with this id", 400));
       }
-      await prisma.vehicle.delete({ where: { id: parseInt(id) } });
+      await prisma.vehicle.delete({ where: { id } });
       res.status(200).json({
         status: "success",
         message: "vehicle deleted sucessfully",
