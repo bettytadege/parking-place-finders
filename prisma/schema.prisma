@@ -22,7 +22,7 @@ model User{
   parkingProvider ParkingProvider[]
   book Booking[]
   payment Payment[]
-  ratingReview RatingReview []
+  // ratingReview RatingReview []
   createdAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -31,7 +31,7 @@ model Vehicle{
  id      String @id @default(uuid())
   vehicleName    String
   vehicleType   VehicleType 
-  plateNumber  String //AA2893
+  plateNumber  String  @unique  //AA2893
   vehicleColor    String?   //optional
   userId    String 
   user   User @relation(fields: [userId] ,references: [id])
@@ -41,7 +41,7 @@ model Vehicle{
 
 model ParkingProvider{
    id      String @id @default(uuid())
-   providerName String @unique
+   providerName String   @unique
    description String?
    totalSpace Int
    email String  @unique
@@ -52,7 +52,7 @@ model ParkingProvider{
    closingTime String
    address  Address?
    book Booking[]
-   ratingReview RatingReview []
+  //  ratingReview RatingReview []
    createdAt DateTime @default(now())
    updatedAt  DateTime @updatedAt
 }
@@ -92,13 +92,14 @@ model Payment{
    totalAmonut Float
    
 }
-model RatingReview{
-   id      String @id @default(uuid())
-   userId    String 
-   user   User @relation(fields: [userId] ,references: [id])
-    providerId String
-   provider ParkingProvider @relation(fields: [providerId], references: [id])
-}
+
+// model RatingReview{
+//    id      String @id @default(uuid())
+//    userId    String 
+//    user   User @relation(fields: [userId] ,references: [id])
+//     providerId String
+//    provider ParkingProvider @relation(fields: [providerId], references: [id])
+// }
 
 
 
