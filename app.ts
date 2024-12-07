@@ -6,6 +6,7 @@ import userRoute from './routes/userRoute'
 import vehicleRoute from './routes/vehicleRoute'
 import addressRoute from './routes/addressRoute'
 import bookingRoute from './routes/bookingRoute'
+import paymentRoute from './routes/paymentRoute'
 import parkingProviderRoute from './routes/parkingProviderRoute'
 import globalErrorHandler from './errorhandler/globalErrorHandler'
 const app=express()
@@ -19,6 +20,7 @@ app.use('/api/provider',parkingProviderRoute)
 app.use('/api/vehicle',vehicleRoute)
 app.use('/api/address',addressRoute)
 app.use('/api/booking',bookingRoute)
+app.use('/api/payment',paymentRoute)
 
 app.use(globalErrorHandler)
 app.get('/' ,(req,res,next)=>{
