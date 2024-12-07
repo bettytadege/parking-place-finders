@@ -81,9 +81,36 @@ export const reserve=catchAsync(async(req: Request, res: Response, next: NextFun
 
 
 //GET ALL BOOKING
-export const getAllProviderBooking=catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
-  const{id}=req.params
+export const getAllBookingsForProvider = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { providerId } = req.params;
+    // pagnation
+    const page = parseInt(req.query.page as string) || 10
+    const limit = parseInt( req.query.limit as string ) || 20
+    const skip:number = (page - 1)* limit
+    const provider = await prisma.parkingProvider.findUnique({
+      
+      where: { id: providerId },
+      select:{
+        book:{
+          skip,
+          take:page
+        }
+        
+      },
+    });
+    // if the provider is not found,send error message
+    if (!provider) {
+      return next(new AppError("provider is not found", 400));
+    }
+    
+    const booking=provider.book
+    // send response
+    res.status(200).json({
+      status: "success",  
+      result: booking.length,
+      booking
+    });
 
-
-  
-})
+  }
+);
