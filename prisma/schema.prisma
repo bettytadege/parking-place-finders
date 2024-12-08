@@ -22,6 +22,7 @@ model User{
   parkingProvider ParkingProvider[]
   book Booking[]
   payment Payment[]
+  rate Rate[]
   // ratingReview RatingReview []
   createdAt DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -52,6 +53,8 @@ model ParkingProvider{
    closingTime String
    address  Address?
    book Booking[]
+   payment Payment[]
+   rate Rate[]
   //  ratingReview RatingReview []
    createdAt DateTime @default(now())
    updatedAt  DateTime @updatedAt
@@ -89,10 +92,19 @@ model Payment{
    user   User @relation(fields: [userId] ,references: [id])
    bookingId    String @unique //1-1
    book   Booking @relation(fields: [bookingId] ,references: [id])
-   totalAmonut Float
+   providerId String
+   provider ParkingProvider @relation(fields: [providerId],references: [id])
+   totalAmount Float
    
 }
-
+model Rate{
+    id      String @id @default(uuid())
+    userId    String
+    hourlyRate Float 
+    user   User @relation(fields: [userId] ,references: [id])
+    providerId String
+    provider ParkingProvider @relation(fields: [providerId],references: [id])
+}
 // model RatingReview{
 //    id      String @id @default(uuid())
 //    userId    String 
