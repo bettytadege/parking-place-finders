@@ -1,9 +1,9 @@
 import express from 'express'
-import { getAllProvider, getOneProvider, register, updateProvider} from '../controller/parkingProviderController'
+import { getAllProvider, getProviderProfile, register, updateProvider} from '../controller/parkingProviderController'
 const router=express.Router()
 
 router.route('/').get(getAllProvider)
-router.route('/:id').get(getOneProvider).patch(updateProvider)
+router.route('/:id').get(getProviderProfile).patch(updateProvider)
 router.post('/register',register)
 
 
