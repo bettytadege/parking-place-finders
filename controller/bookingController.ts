@@ -23,26 +23,32 @@ export const reserve=catchAsync(async(req: Request, res: Response, next: NextFun
         return next(new AppError('provider is not found',400))
     }
       // calculate available spot
-      //reserved parking spot is the length of booked spot
      const reservedParkingSpot=provider.book.length
      const availableSpot=provider.totalSpace - reservedParkingSpot
+     
       // if no available spots
       if(availableSpot <= 0){
-      return next(new AppError('there is no available parking spot',404))
+      return next(new AppError('sorry,there is no available parking spot',404))
      } 
     //  compare start time and end time with opening and closing time
-     let sTime=req.body.startTime
-     let eTime=req.body.endTime
-     sTime=sTime.split('T')[1]
-     eTime=eTime.split('T')[1]
-    //  console.log('start time:',sTime)
-    //  console.log('end time:',eTime)
-    //  console.log(sTime < provider.openingTime)
-    //  console.log(eTime > provider.closingTime)
+     let sTime=new Date(startTime)
+     let eTime=new Date(endTime)
+    //  sTime=sTime.split('T')[1]
+    //  eTime=eTime.split('T')[1]
+    //  console.log('start time:',sTime,typeof sTime)
+    //  console.log('end time:',eTime,typeof eTime)
+   
+    //  console.log('openingtime:',new Date(provider.openingTime))
+    //  console.log('closing time:',new Date(provider.closingTime))
+
+    //  console.log(sTime < new Date(provider.openingTime))
+    //  console.log(eTime > new Date(provider.closingTime))
+     
+     
     
 
     // check if reservation time is between operational time
-      if( sTime < provider.openingTime || eTime > provider.closingTime ){
+      if( sTime < new Date(provider.openingTime) || eTime > new Date(provider.closingTime )){
         return next(new AppError('No parking provider is available during the selected time,please choose other time',400))
       }
    
@@ -61,10 +67,14 @@ export const reserve=catchAsync(async(req: Request, res: Response, next: NextFun
     if(existingReservation){
       return next(new AppError('This parking space is already  reserved,please choose other time',400))
     }
-  
+
+     
     //create new booking 
     const newBooking = await prisma.booking.create({
-      data: { ...req.body, price: parseFloat(req.body.price) },
+      data: { ...req.body, 
+        startTime:sTime,
+        endTime:eTime
+      },
     });
 
 
@@ -103,7 +113,7 @@ export const getAllBookingsForProvider = catchAsync(
     if (!provider) {
       return next(new AppError("provider is not found", 400));
     }
-    
+    //
     const booking=provider.book
     // send response
     res.status(200).json({
