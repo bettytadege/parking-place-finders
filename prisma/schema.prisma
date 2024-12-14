@@ -15,6 +15,7 @@ model User{
   email   String   @unique
   phoneNumber String @unique // it include country code (+251)
   password String
+  firebaseUid      String           @unique
   status  UserStatus?
   profileImage String
   role  Role @default(user) 
@@ -78,7 +79,7 @@ model Booking{
    providerId String
    provider ParkingProvider @relation(fields: [providerId], references: [id])
    status BookingStatus
-   price Float
+  //  price Float
    payment Payment?
    startTime  DateTime
    endTime    DateTime
@@ -94,10 +95,11 @@ model Payment{
    book   Booking @relation(fields: [bookingId] ,references: [id])
    providerId String
    provider ParkingProvider @relation(fields: [providerId],references: [id])
-   totalAmount Float
+   amount Float
    
 }
 model Rate{
+
     id      String @id @default(uuid())
     userId    String
     hourlyRate Float 
