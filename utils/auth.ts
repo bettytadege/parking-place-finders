@@ -1,5 +1,5 @@
 import jwt, { Secret } from 'jsonwebtoken'
-import { S } from 'vite/dist/node/types.d-aGj9QkWt';
+
 
 export const signToken = (payload:{id:string,role?:string})=> {
   const {
