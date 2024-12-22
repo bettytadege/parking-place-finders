@@ -96,7 +96,7 @@ export const login = catchAsync(
 );
 
 //GET USER BY ID
-export const getOneUser=catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
+export const getUserProfile=catchAsync(async(req: Request, res: Response, next: NextFunction)=>{
     // 
     const { id } = req.params;
     console.log(id,typeof id)
