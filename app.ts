@@ -10,11 +10,14 @@ import paymentRoute from './routes/paymentRoute'
 import rateRoute from './routes/rateRoute'
 import parkingProviderRoute from './routes/parkingProviderRoute'
 import globalErrorHandler from './errorhandler/globalErrorHandler'
+import validateId from './errorhandler/validateId'
 const app=express()
 
 app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
+
+app.use(validateId)
 //routes
 app.use('/api/users',userRoute)
 app.use('/api/provider',parkingProviderRoute)
@@ -23,7 +26,7 @@ app.use('/api/address',addressRoute)
 app.use('/api/booking',bookingRoute)
 app.use('/api/payment',paymentRoute)
 app.use('/api/rate',rateRoute)
-
+//
 //global error handler
 app.use(globalErrorHandler)
 app.get('/' ,(req,res,next)=>{
