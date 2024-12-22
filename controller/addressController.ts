@@ -1,4 +1,4 @@
-import { Address } from "./../node_modules/.prisma/client/index.d";
+
 import AppError from "../errorhandler/appError";
 import { catchAsync } from "../errorhandler/catchAsync";
 import { NextFunction, Request, Response } from "express";
@@ -7,13 +7,14 @@ import { v4 as uuidv4 } from "uuid";
 
 export const register = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    // get provider id from request body
     const { providerId } = req.body;
-    // Check if provider already exists
     const addressId = uuidv4();
+    // Check if provider already exists
     const provider = await prisma.parkingProvider.findUnique({
       where: { id: providerId },
     });
-    //
+    //if provider is not provided
     if (!providerId) {
       return next(new AppError("Please provide provider id", 400));
     }
