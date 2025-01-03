@@ -10,11 +10,10 @@ datasource db {
 
 model User{
   id      String @id @default(uuid())
-  firstName   String
-  lastName   String
+  name     String
   email   String   @unique
-  phoneNumber String @unique // it include country code (+251)
-  password String
+  phoneNumber String? @unique // it include country code (+251)
+  password String?
   firebaseUid      String           @unique
   status  UserStatus?
   profileImage String
@@ -43,7 +42,7 @@ model Vehicle{
 
 model ParkingProvider{
    id      String @id @default(uuid())
-   providerName String   @unique
+   name String   @unique
    description String?
    totalSpace Int
    email String  @unique
