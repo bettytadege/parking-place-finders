@@ -127,3 +127,31 @@ export const updateProvider = catchAsync(
       });
   }
 );
+
+export const Search = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { name ,address } = req.query;
+    if(!name || !address){
+      return next(new AppError("name or address required ", 404)); 
+    }
+    //find provider using provider id
+      const provider = await prisma.parkingProvider.findMany({
+        where: {
+          name:name as string,
+          // address
+
+        },
+      });
+      // if provider is not found
+      if (!provider) {
+        return next(new AppError("provider not found ", 404));
+      }
+     //update provider
+
+     //send reponse
+      res.status(200).json({
+        status: "success",
+        provider
+      });
+  }
+);
