@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { catchAsync } from "../errorhandler/catchAsync";
 import { prisma } from "../prisma/client";
 import AppError from "../errorhandler/appError";
-import { floated } from "@material-tailwind/react/types/components/card";
 import { v4 as uuidv4 } from "uuid";
 export const checkout = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +39,7 @@ export const checkout = catchAsync(
     //calculate duration
     let startTime = new Date(booking.startTime);
     let endTime = new Date(booking.endTime);
-    console.log(startTime, startTime.getTime());
+    // console.log(startTime, startTime.getTime());
 
     let durationTime =
       (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60); //convert into hour
