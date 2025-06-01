@@ -2,10 +2,13 @@
   "name": "parking-place-finder-prisma",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node server.ts"
+    "dev": "ts-node server.ts",              
+    "build": "tsc",                          
+    "start": "node dist/server.js",          
+    "prestart": "npm run build"              
   },
   "engines": {
     "node": "18.x"
